@@ -1,0 +1,19 @@
+{
+  "name": "climodoro",
+  "version": "0.0.1",
+  "description": "a CLI application to track time following the pomodoro technique",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "author": "Luis Chavez (luischavezcald@gmail.com)",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/inquirer": "^8.2.1",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "inquirer": "^8.2.2"
+  }
+}
