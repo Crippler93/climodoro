@@ -1,4 +1,4 @@
-export default {
+const art = {
   startWorking() {
 console.log(`
        _                _                           _     _               
@@ -23,3 +23,6 @@ console.log(`
   }
 }
 
+export {
+  art
+}

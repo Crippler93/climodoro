@@ -1,11 +1,15 @@
 import inquirer from 'inquirer';
-import art from './asciiArt';
+import { art } from './asciiArt.js';
+import ora from 'ora';
+
 
 const menuOptions = ['Start tracking time', 'View time log', 'Exit'];
 const trackingOptions = ['Back to menu', 'Exit'];
 let intervalID = null;
 
 async function showMenu() {
+  console.clear();
+  art.climodoro();
   const answers = await inquirer.prompt(
     [
       {
@@ -21,24 +25,26 @@ async function showMenu() {
   if (answers.theme === menuOptions[0]) {
     await showTrackingMenu();
   }
-  console.log(JSON.stringify(answers, null, '  '));
 }
 
 
 async function showTrackingMenu() {
-  art.startWorking();
+  console.clear();
   let time = new Date().getTime();
   let counter = 0;
+  const spinner = ora('Tracking time: 0').start();
+  spinner.color = 'cyan';
+
 
   function printProgress() {
-    process.stdout.cursorTo(0);
-    process.stdout.write('Count is: ' + counter);
+    spinner.text = `Tracking time: ${counter}`
     counter++;
   }
   intervalID = setInterval(function() {
     printProgress();
   }, 1000);
-
+  console.clear();
+  art.startWorking();
   const answers = await inquirer.prompt(
     [
       {
@@ -58,6 +64,7 @@ async function showTrackingMenu() {
   console.log("Time spent", `${hours}:${minutes}:${seconds}`);
   clearInterval(intervalID);
   intervalID = null;
+  spinner.stop();
 
   if (answers.theme === trackingOptions[0]) {
     await showMenu();
@@ -71,5 +78,4 @@ async function showTimeLog() {
   
 }
 
-art.climodoro();
 showMenu();
