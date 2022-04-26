@@ -26,6 +26,10 @@ const art = {
   }
 }
 
+export const printTimeTracked = (totalTime: string) => {
+  console.log(chalk.magenta(`\nTime tracked: ${totalTime}\n`));
+}
+
 export {
-  art
+  art,
 }
