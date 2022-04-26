@@ -7,10 +7,10 @@ import { secondsToTime } from './utils.js';
 import { Timer, Watch } from './timers.js';
 
 
-const menuOptions = ['Start tracking time', 'View time log', 'Exit'];
+const menuOptions = ['Start tracking time (Pomodoro)', 'Tracking undefined time', 'View time log', 'Exit'];
 const trackingOptions = ['Back to menu', 'Exit'];
 
-let selectedMenu: 'menu' | 'trackTime' | 'timeLog' | 'exit';
+let selectedMenu: 'menu' | 'trackPomodoro' | 'trackTime' | 'timeLog' | 'exit';
 selectedMenu = 'menu'
 let totalTime;
 
@@ -19,6 +19,9 @@ let totalTime;
     switch (selectedMenu as any) {
       case 'menu':
         await showMenu(totalTime);
+        break;
+      case 'trackPomodoro':
+        await showTrackingMenuPomodoro();
         break;
       case 'trackTime':
         await showTrackingMenu();
@@ -46,9 +49,12 @@ async function showMenu(totalTime: string|null = null) {
 
       }
     ]);
-  if (answers.theme === menuOptions[0]) {
-    selectedMenu = 'trackTime';
-  } else if (answers.theme === menuOptions[2]) {
+  if (answers.theme === menuOptions[1]) {
+    selectedMenu = 'trackTime'; 
+  }
+  else if (answers.theme === menuOptions[0]) {
+    selectedMenu = 'trackPomodoro';
+  } else if (answers.theme === menuOptions[3]) {
     selectedMenu = 'exit';
   }
 }
@@ -101,6 +107,69 @@ async function showTrackingMenu() {
   }
     
 }
+
+
+async function showTrackingMenuPomodoro() {
+  console.clear();
+  const spinner = ora('Work time remaining:').start();
+  
+  function onWorkStart() {
+  }
+  
+  function printProgress(counter: number) {
+    spinner.color = 'red';
+    spinner.text = `Work time remaining: ${secondsToTime(counter)}`;
+  }
+
+  function stopProgress() {
+    restTimer.start();
+  }
+  
+  function restPrintProgress(counter: number) {
+    spinner.color = 'cyan';
+    spinner.text = `Rest time remaining: ${secondsToTime(counter)}`
+  }
+
+  function stopRest() {
+    workTimer.start();
+  }
+
+  const workTimer = new Timer({onStart: () => {}, onProgress: printProgress, onEnd: stopProgress}, (10 * 60))
+  const restTimer = new Timer({onStart: () => {}, onProgress: restPrintProgress, onEnd: stopRest}, (5 * 60))
+  workTimer.start()
+
+  console.clear();
+  art.startWorking();
+  const answers = await inquirer.prompt(
+    [
+      {
+        type: 'list',
+        name: 'theme',
+        message: 'Time is being tracked, Select an option',
+        choices: [
+          ...trackingOptions
+        ],
+
+      }
+    ]
+  );
+  
+  workTimer.forceStop();
+  restTimer.forceStop();
+  spinner.stop();
+
+  const [, hours, minutes, seconds ] = /(\d\d):(\d\d):(\d\d)/.exec(new Date(workTimer.totalSeconds * 1000).toUTCString()) as string[];
+  totalTime = `${hours}:${minutes}:${seconds}`
+
+
+  if (answers.theme === trackingOptions[0]) {
+    selectedMenu = 'menu'
+  } else {
+    selectedMenu = 'exit'
+  }
+    
+}
+
 
 async function showTimeLog() {
   

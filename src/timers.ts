@@ -19,14 +19,17 @@ export class Watch {
 
 export class Timer {
   private intervalID: any = null;
-  constructor(private fns: {onStart: any, onEnd: any}, private secondsRemaining: number ) {}
+  public totalSeconds: number = 0;
+  constructor(private fns: {onStart: any, onEnd: any, onProgress: any}, private secondsRemaining: number ) {}
 
   start() {
     let counter = this.secondsRemaining;
+    this.fns.onStart();
     this.intervalID = setInterval(() => {
-      this.fns.onStart(counter);
-      if (counter <= 0) this.stop();
+      this.fns.onProgress(counter);
+      if (counter <= 1) this.stop();
       counter -= 1;
+      this.totalSeconds += 1;
     }, 1000)
   }
 
@@ -34,5 +37,10 @@ export class Timer {
     clearInterval(this.intervalID);
     this.intervalID = null;
     this.fns.onEnd();
+  }
+
+  forceStop() {
+    clearInterval(this.intervalID);
+    this.intervalID = null;
   }
 }
