@@ -29,6 +29,7 @@ export class Timer {
       this.fns.onProgress(counter);
       if (counter <= 1) this.stop();
       counter -= 1;
+      console.log(this.totalSeconds);
       this.totalSeconds += 1;
     }, 1000)
   }
