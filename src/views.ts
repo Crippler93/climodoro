@@ -31,8 +31,7 @@ export async function showTrackingMenu(): Promise<trackResult> {
   }
 
   const result = await startWatchTracking(promiseWatch);
-
-  const totalTime = UTCDateToTime(secondsToDate(result.seconds).toUTCString());
+  const totalTime = result.seconds;
 
   if (result.answer.theme === trackingOptions[0]) {
     return {selectedOption: 'menu', totalTime};
@@ -51,8 +50,7 @@ export async function showTrackingMenuPomodoro(): Promise<trackResult> {
   }
 
   const result = await startPomodoroTracking(trackerPromise, 25, 5)
-
-  const totalTime = UTCDateToTime(secondsToDate(result.seconds).toUTCString());
+  const totalTime = result.seconds
 
   if (result.answer.theme === trackingOptions[0]) {
     return {selectedOption: 'menu', totalTime}
