@@ -15,3 +15,22 @@ export const UTCDateToTime = (utcDate: string) => {
 }
 
 export const secondsToDate = (seconds: number) => new Date(seconds * MILISECONDS);
+
+export const milisecondsToDateString = (miliseconds: number) => {
+  const timeReg = /\d{1,2}:\d{1,2}:\d{1,2}/;
+  const dateReg = /\d{4}-\d{2}-\d{1,2}/;
+  const date = new Date(miliseconds);
+
+  let time: any = timeReg.exec(date.toString());
+  time = (time !== null) ?
+    time[0]
+  :
+    "";
+  let dateString: any = dateReg.exec(date.toISOString());
+  dateString = (time !== null) ?
+    dateString[0]
+  :
+    "";
+
+  return `${dateString} ${time}`;
+}

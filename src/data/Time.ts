@@ -3,5 +3,5 @@ export interface Log {
   name: string;
   timeTrackedSeconds: number;
   type: 'pomodoro' | 'watch';
-  createdAt: Date;
+  createdAt: number;
 }

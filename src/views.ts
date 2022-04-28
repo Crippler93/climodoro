@@ -1,8 +1,10 @@
 import { secondsToDate, UTCDateToTime } from './utils.js';
 import { art, printTimeTracked } from './print.js';
 import { menuOptions, trackResult } from './types/index.js';
-import { mainMenu, menuOptionsList, trackingMenu, trackingOptions } from './menus.js';
+import { goBackMenu, mainMenu, menuOptionsList, trackingMenu, trackingOptions } from './menus.js';
 import { startPomodoroTracking, startWatchTracking } from './Trackers.js';
+import { generateLogReport } from './report/index.js';
+import { Log } from './data/Time.js';
 
 export async function showMenu(totalTime: string|null = null): Promise<menuOptions> {
   console.clear();
@@ -14,8 +16,8 @@ export async function showMenu(totalTime: string|null = null): Promise<menuOptio
   }
   else if (answers.theme === menuOptionsList[0]) {
     return 'trackPomodoro';
-  } else if (answers.theme === menuOptionsList[3]) {
-    return 'exit';
+  } else if (answers.theme === menuOptionsList[2]) {
+    return 'timeLog';
   } else {
     return 'exit';
   }
@@ -57,4 +59,15 @@ export async function showTrackingMenuPomodoro(): Promise<trackResult> {
   } else {
     return {selectedOption: 'exit', totalTime}
   }
+}
+
+export async function showTimeLog(logs: Log[]): Promise<trackResult> {
+  console.clear();
+
+  generateLogReport(logs);
+
+  await goBackMenu();
+
+  return {selectedOption: 'menu', totalTime: 0}
+  
 }

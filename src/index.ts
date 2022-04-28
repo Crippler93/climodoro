@@ -1,7 +1,8 @@
-import { showMenu, showTrackingMenu, showTrackingMenuPomodoro } from './views.js'
+import { showMenu, showTimeLog, showTrackingMenu, showTrackingMenuPomodoro } from './views.js'
 import { menuOptions } from './types/index.js';
-import { init, disconnect, createLog } from './data/index.js';
+import { init, disconnect, createLog, getAllLogs } from './data/index.js';
 import { secondsToDate, UTCDateToTime } from './utils.js';
+import { generateLogReport } from './report/index.js';
 
 let selectedMenu: menuOptions = 'menu';
 let totalTime;
@@ -27,6 +28,12 @@ let totalTime;
           selectedMenu = result.selectedOption;
           totalTime = UTCDateToTime(secondsToDate(result.totalTime).toUTCString());
           await createLog(result.totalTime, 'watch');
+          break;
+        }
+        case 'timeLog': {
+          const logs = await getAllLogs();
+          const result = await showTimeLog(logs);
+          selectedMenu = result.selectedOption;
           break;
         }
         case 'exit':

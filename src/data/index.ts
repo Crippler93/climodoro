@@ -37,7 +37,7 @@ export async function disconnect() {
 
 export async function createLog(seconds: number, type: 'pomodoro' | 'watch', name = 'Working') {
   try {
-    await knexInstance<Log>('log').insert({name, timeTrackedSeconds: seconds, createdAt: new Date(), type});
+    await knexInstance<Log>('log').insert({name, timeTrackedSeconds: seconds, createdAt: new Date().getTime(), type});
   } catch {
     throw new DatabaseError();
   }
