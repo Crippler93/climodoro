@@ -42,7 +42,7 @@ export function goBackMenu(): Promise<any> {
       {
         type: 'list',
         name: 'theme',
-        message: 'Time is being tracked, Select an option',
+        message: 'Select an option',
         choices: [
           ...goBackOptions
         ],
